@@ -1,0 +1,37 @@
+{% extends "index.html" %}
+{% block body %}
+
+    <div class="container">
+        <div class="row" id="Tests">
+            <div class="col-md-12">
+                 <table class="table">
+                      <tr>
+                          <th>Course Code</th>
+                          <th>Title</th>
+                          <th>Chapter</th>
+                          <th>Pages</th>
+                          <th>Date</th>
+                          <th>Complete</th>
+                      </tr>
+
+                    {% for entry in entries %}
+                    <tr>
+                        <td>{{ entry.course_code }}</td>
+                        <td>{{ entry.reading_name }}</td>
+                        <td>{{ entry.chapter }}</td>
+                        <td>{{ entry.pages }}</td>
+                        <td>{{ entry.date }}</td>
+                        <td>{{ entry.complete }}</td>
+
+                    </tr>
+                    {% else %}
+                    <tr><td><em>Unbelievable.  No entries here so far</em></td></tr>
+                    {% endfor %}
+
+
+                 </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
