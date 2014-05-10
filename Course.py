@@ -64,7 +64,7 @@ def clean_and_convert_date(date):
 
         month = MONTHS.get(month.upper())
 
-        date =datetime.datetime(2014,month,int(day))
+        date =datetime.date(2014,month,int(day))
 
     return date
 

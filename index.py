@@ -1,10 +1,15 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import with_statement
+
 from sqlite3 import dbapi2 as sqlite3
 from flask import Flask, request, session, g, redirect, url_for, abort, \
      render_template, flash, _app_ctx_stack
+
+
+
 import os
+
+TYPES = ['Readings', 'Assignments', 'Tests']
 app = Flask(__name__)
 
 # configuration
@@ -54,13 +59,28 @@ def close_db_connection(exception):
         top.sqlite_db.close()
 
 
+
+@app.route('/')
+def show_all():
+    db = get_db()
+
+    entries =[]
+    for homework in TYPES:
+        entries.append(select_homework(homework,db))
+    homework = join_homework(entries)
+
+    return render_template('show_all.html',entries=homework )
+
+
+
+
 @app.route('/Assignments')
 def show_assignments():
     db = get_db()
     sql = '''SELECT * FROM {0} ORDER BY date'''.format("Assignments")
     cur = db.execute(sql)
     entries = cur.fetchall()
-    return render_template('show_assignments.html',entries=entries)
+    return render_template('show_assignments.html', entries=entries)
 
 @app.route('/Tests')
 def show_tests():
@@ -68,7 +88,7 @@ def show_tests():
     sql = '''SELECT * FROM {0} ORDER BY date'''.format("Tests")
     cur = db.execute(sql)
     entries = cur.fetchall()
-    return render_template('show_tests.html',entries=entries)
+    return render_template('show_tests.html', entries=entries)
 
 @app.route('/Readings')
 def show_readings():
@@ -79,7 +99,47 @@ def show_readings():
     return render_template('show_readings.html',entries=entries)
 
 
+from jinja2 import environment
+from datetime import date
 
+def format_datetime(value,format='%b-%d'):
+    list_date = value.split('-')
+
+    strdate = date(int(list_date[0]),int(list_date[1]),int(list_date[2]))
+    return strdate.strftime(format)
+
+environment.DEFAULT_FILTERS['datetimeformat']=format_datetime
+
+def select_homework(homework_type,db):
+    sql = ''' SELECT * FROM {0} ORDER BY date'''.format(homework_type)
+    cur = db.execute(sql)
+    entries = cur.fetchall()
+    return entries
+
+def join_homework(homework):
+
+    entries=[]
+    i=0
+    for table in homework:
+        for row in table:
+            name = row['name']
+            if 'chapter' in row.keys() and 'pages' in row.keys():
+                if None!= row['chapter'] and row['chapter']!=name:
+                    name='--'.join([name,row['chapter']])
+                if None!= row['pages']:
+                     name='--'.join([name,row['pages']])
+
+
+            if 'time' not in row.keys():
+                time = 'in-class'
+            else:
+                time = row['time']
+
+            new_row = {'type':TYPES[i],'course_code':row['course_code'],'name':name,
+                       'date':row['date'],'time':time,'complete':row['complete']}
+            entries.append(new_row)
+        i+=1
+    return entries
 
 if __name__ == '__main__':
     #init_db()
