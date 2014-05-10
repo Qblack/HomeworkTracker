@@ -6,31 +6,21 @@
                 <form role="form" method="post" id="homework_form" action="/">
 
                  <div class="row">
-                     <div class="col-md-1">
-                        <button type="submit" class="btn btn-default btn-small ">Update</button>
-                     </div>
-                    <div class="col-md-1">
+                    <div class="col-md-8 col-md-offset">
+
                         <button type="button" class="btn btn-info"
-                                onclick="filterReadings()">Hide Readings</button>
-                    </div>
-                    <div class="col-md-1 col-md-offset-1">
+                                onclick="filterReadings()">Toggle Readings</button>
                         <button type="button" class="btn btn-danger"
-                                onclick="filterTests()">Hide Tests</button>
-                    </div>
-                    <div class="col-md-1 col-md-offset-1">
-                        <button type="button" class="btn btn-Success"
-                                onclick="filterAssignments()">Hide Assignments</button>
+                                onclick="filterTests()">Toggle Tests</button>
+                        <button type="button" class="btn btn-success"
+                                onclick="filterAssignments()">Toggle Assignments</button>
+
+                        <button type="button" class="btn btn-warning" onclick="unhideRows()">Show All</button>
+                        <button type="button" class="btn btn-default" onclick="hideRows()">Hide Completed</button>
+                        <button type="submit" class="btn btn-primary btn-lg">Update</button>
                     </div>
 
-                    <div class="col-md-1 col-md-offset-1">
-                        <button type="button" class="btn btn-success" onclick="unhideRows()">Show All</button>
-                    </div>
-
-                    <div class="col-md-1 col-md-offset-1">
-                        <button type="button" class="btn btn-danger" onclick="hideRows()">Hide Completed</button>
-                    </div>
-
-                    <div class="col-md-4 col-md-offset-1">
+                    <div class="col-md-4 col-md-offset">
                         <div class="input-group">
                             <input type="text" class="form-control"  id="search">
                                 <span class="input-group-addon">
