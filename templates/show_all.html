@@ -17,6 +17,7 @@
 
                         <button type="button" class="btn btn-warning" onclick="unhideRows()">Show All</button>
                         <button type="button" class="btn btn-default" onclick="hideRows()">Hide Completed</button>
+                        <button type="button" class="btn btn-default" onclick="darkenWeek()">WeekView</button>
                         <button type="submit" class="btn btn-primary btn-lg">Update</button>
                     </div>
 
@@ -100,7 +101,24 @@ function filterTests(){
     });
 };
 
+function darkenWeek(){
+    $("#homework_form tr").each(function () {
+       
+       var rgb = $(this).css("background-color");
+       if (rgb.match(/^rgb/)){
+           $(this).css({"background-color":darken_rgb(rgb)} );
+       }
+    });
+}
 
+function darken_rgb(rgb) {
+    rgb = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+    for( var i=1; i<rgb.length;i++){
+        rgb[i] = parseInt(rgb[i])-20
+    }
+    var new_rgb = "rgb("+rgb[1]+", "+rgb[2]+", "+rgb[3]+")"
+    return new_rgb
+}
 
 </script>
 
