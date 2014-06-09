@@ -17,7 +17,7 @@
 
                         <button type="button" class="btn btn-warning" onclick="unhideRows()">Show All</button>
                         <button type="button" class="btn btn-default" onclick="hideRows()">Hide Completed</button>
-                        <button type="button" class="btn btn-default" onclick="darkenWeek()">WeekView</button>
+                        <button type="button" class="btn btn-default" onclick="darkenWeek()">Week On</button>
                         <button type="submit" class="btn btn-primary btn-lg">Update</button>
                     </div>
 
@@ -46,7 +46,7 @@
                     <tr class="{{ entry.type }}" id="{{ entry.id }}">
                         <td>{{ entry.course_code }}</td>
                         <td>{{ entry.name }}</td>
-                        <td>{{ entry.date|datetimeformat }}</td>
+                        <td class="date">{{ entry.date|datetimeformat }}</td>
                         <td >{{ entry.time }}</td>
                         <td>
                             <div class="checkbox">
@@ -102,23 +102,39 @@ function filterTests(){
 };
 
 function darkenWeek(){
+    var today = new Date();
+
+    var end_of_week = new Date();
+    end_of_week.setDate(today.getDate()+7);
+
     $("#homework_form tr").each(function () {
-       
        var rgb = $(this).css("background-color");
        if (rgb.match(/^rgb/)){
-           $(this).css({"background-color":darken_rgb(rgb)} );
+            var date = $(this).find(".date").html();
+            var row_date = shortDate2Date(today,date);
+            if (row_date>=today && row_date<=end_of_week){
+                $(this).css({"background-color":darken_rgb(rgb,30)} );
+            }else if(row_date<today){
+                $(this).hide();
+            }
        }
     });
-}
+};
 
-function darken_rgb(rgb) {
+function darken_rgb(rgb,amount) {
     rgb = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
     for( var i=1; i<rgb.length;i++){
-        rgb[i] = parseInt(rgb[i])-20
+        rgb[i] = parseInt(rgb[i])-amount
     }
     var new_rgb = "rgb("+rgb[1]+", "+rgb[2]+", "+rgb[3]+")"
     return new_rgb
-}
+};
+
+function shortDate2Date(today,date){
+    var converted = date.replace('-',',');
+    var new_date = Date.parse(converted+" "+today.getFullYear());
+    return new Date(new_date);
+};
 
 </script>
 
