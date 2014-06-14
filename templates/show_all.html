@@ -107,17 +107,17 @@ function darkenWeek(){
     var end_of_week = new Date();
     end_of_week.setDate(today.getDate()+7);
 
-    $("#homework_form tr").each(function () {
+    $("#homework_form tbody tr").each(function () {
        var rgb = $(this).css("background-color");
-       if (rgb.match(/^rgb/)){
-            var date = $(this).find(".date").html();
-            var row_date = shortDate2Date(today,date);
-            if (row_date>=today && row_date<=end_of_week){
-                $(this).css({"background-color":darken_rgb(rgb,30)} );
-            }else if(row_date<today){
-                $(this).hide();
-            }
+
+       var date = $(this).find(".date").html();
+       var row_date = shortDate2Date(today,date);
+       if (row_date>=today && row_date<=end_of_week){
+           $(this).css({"background-color":darken_rgb(rgb,30)} );
+       }else if(row_date<today){
+           $(this).hide();
        }
+
     });
 };
 
